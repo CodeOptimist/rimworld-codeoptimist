@@ -27,18 +27,34 @@ namespace CodeOptimist
                 LogType(type);
         }
 
-        public static void LogType(Type type, bool recursive = true) {
-            foreach (var method in AccessTools.GetDeclaredMethods(type))
+        public static void LogNamespace(string @namespace) {
+            var types = LoadedModManager.RunningModsListForReading.SelectMany(x => x.assemblies.loadedAssemblies).SelectMany(x => x.GetTypes())
+                .Where(t => t.IsClass && t.Namespace == @namespace);
+            foreach (var type in types)
+                LogType(type);
+        }
+
+        public static void LogNamespace(string modName, string @namespace) {
+            var mod = LoadedModManager.RunningModsListForReading.FirstOrDefault(x => x.Name == modName);
+            Debug.Assert(mod != null);
+            var types = mod.assemblies.loadedAssemblies.SelectMany(x => x.GetTypes()).Where(t => t.IsClass)
+                .Where(t => t.Namespace == @namespace || (t.Namespace?.StartsWith($"{@namespace}.") ?? false));
+            foreach (var type in types)
+                LogType(type);
+        }
+
+        public static void LogType(Type type, List<string> excludedMethods = null, bool recursive = true) {
+            Debug.WriteLine($"Patching: {type.Name}");
+            foreach (var method in AccessTools.GetDeclaredMethods(type).Where(x => !excludedMethods?.Contains(x.Name) ?? true))
                 LogMethod(method);
 
             if (!recursive) return;
             foreach (var nestedType in type.GetNestedTypes(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
-                LogType(nestedType);
+                LogType(nestedType, excludedMethods);
         }
 
         public static void LogMethod(MethodBase method) {
             Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null");
-            Debug.WriteLine($"Patching: {method.DeclaringType.Name} -> {method.Name}");
             try {
                 harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogCall))));
             } catch {
@@ -51,8 +67,10 @@ namespace CodeOptimist
             openMethods.IntersectWith(callStack);
             openMethods.Add(callStack[2]);
 
+            // if (openMethods.Count == 1)
+            //     Debug.WriteLine($"{Environment.StackTrace}");
             var tabs = new string('\t', (openMethods.Count - 1) * 2);
-            Debug.WriteLine($"{RealTime.frameCount} • {tabs}{__originalMethod.DeclaringType} -> {__originalMethod.Name}");
+            Debug.WriteLine($"{RealTime.frameCount} • {tabs}{__originalMethod.DeclaringType} -> {__originalMethod}");
         }
 
         public static void LogMods() {

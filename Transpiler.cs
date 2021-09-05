@@ -209,7 +209,6 @@ namespace CodeOptimist
         /*
         // dumb test
         [HarmonyPatch(typeof(FloatMenuMakerMap), "AddHumanlikeOrders")]
-//            [HarmonyPatch(typeof(FloatMenuMakerMap), "AddDraftedOrders")]
         static class FloatMenuMakerMap_AddHumanlikeOrders_Patch
         {
             [HarmonyTranspiler]
