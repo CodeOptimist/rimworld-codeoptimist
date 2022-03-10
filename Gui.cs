@@ -17,10 +17,17 @@ namespace CodeOptimist
         readonly float      labelPct;
 
         public DrawContext() {
-            guiColor = GUI.color;
-            textFont = Text.Font;
+            guiColor   = GUI.color;
+            textFont   = Text.Font;
             textAnchor = Text.Anchor;
-            labelPct = guiLabelPct;
+            labelPct   = guiLabelPct;
+        }
+
+        public void Dispose() {
+            GUI.color   = guiColor;
+            Text.Font   = textFont;
+            Text.Anchor = textAnchor;
+            guiLabelPct = labelPct;
         }
 
         public Color GuiColor {
@@ -37,13 +44,6 @@ namespace CodeOptimist
 
         public float LabelPct {
             set => guiLabelPct = value;
-        }
-
-        public void Dispose() {
-            GUI.color = guiColor;
-            Text.Font = textFont;
-            Text.Anchor = textAnchor;
-            guiLabelPct = labelPct;
         }
     }
 
@@ -84,7 +84,7 @@ namespace CodeOptimist
         }
 
         public static void DrawEnum<T>(this Listing_Standard list, T value, string name, Action<T> setValue, float height = 30f) {
-            var rect = list.GetRect(height);
+            var rect    = list.GetRect(height);
             var tooltip = name.Desc();
             if (!tooltip.NullOrEmpty()) {
                 if (Mouse.IsOver(rect.LeftPart(DrawContext.guiLabelPct)))

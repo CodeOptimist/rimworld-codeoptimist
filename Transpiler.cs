@@ -6,7 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using Verse; // ReSharper disable once RedundantUsingDirective
+using Verse;
+// ReSharper disable once RedundantUsingDirective
 using Debug = System.Diagnostics.Debug;
 
 namespace CodeOptimist
@@ -38,7 +39,7 @@ namespace CodeOptimist
             var list = codes.ToList();
             foreach (var instruction in list) {
                 if (instruction.operand is MethodInfo methodInfo && subs.TryGetValue(methodInfo.DeclaringType, out var to)) {
-                    var paramTypes = methodInfo.GetParameters().Select(x => x.ParameterType).ToArray();
+                    var paramTypes   = methodInfo.GetParameters().Select(x => x.ParameterType).ToArray();
                     var genericTypes = methodInfo.GetGenericArguments();
                     var replacement = methodInfo.IsGenericMethod
                         ? AccessTools.DeclaredMethod(to, methodInfo.Name, paramTypes, genericTypes)
@@ -72,7 +73,7 @@ namespace CodeOptimist
         [MethodImpl(MethodImplOptions.NoInlining)]
         public Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase originalMethod) {
             this.originalMethod = originalMethod;
-            patchMethod = new StackFrame(1).GetMethod();
+            patchMethod         = new StackFrame(1).GetMethod();
 
             var patches = Harmony.GetPatchInfo(originalMethod);
             if (patches != null)
@@ -160,7 +161,7 @@ namespace CodeOptimist
                     }
 
                     idxInserts.Add(inserts);
-                    MatchIdx = i;
+                    MatchIdx  = i;
                     InsertIdx = i + offset;
                     return;
                 }
