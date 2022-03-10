@@ -87,14 +87,14 @@ namespace CodeOptimist
             var rect = list.GetRect(height);
             var tooltip = name.Desc();
             if (!tooltip.NullOrEmpty()) {
-                if (Mouse.IsOver(rect.LeftHalf()))
+                if (Mouse.IsOver(rect.LeftPart(DrawContext.guiLabelPct)))
                     Widgets.DrawHighlight(rect);
-                TooltipHandler.TipRegion(rect.LeftHalf(), tooltip);
+                TooltipHandler.TipRegion(rect.LeftPart(DrawContext.guiLabelPct), tooltip);
             }
 
-            Widgets.Label(rect.LeftHalf(), name.Title());
+            Widgets.Label(rect.LeftPart(DrawContext.guiLabelPct), name.Title());
             var valueName = Enum.GetName(typeof(T), value);
-            if (Widgets.ButtonText(rect.RightHalf(), $"{name}_{valueName}".Title())) {
+            if (Widgets.ButtonText(rect.RightPart(1 - DrawContext.guiLabelPct), $"{name}_{valueName}".Title())) {
                 var menuOptions = new List<FloatMenuOption>();
                 foreach (var enumValue in Enum.GetValues(typeof(T)).Cast<T>()) {
                     var enumValueName = Enum.GetName(typeof(T), enumValue);
