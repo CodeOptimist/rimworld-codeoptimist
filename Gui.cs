@@ -77,6 +77,12 @@ namespace CodeOptimist
             Widgets.TextFieldNumeric(rect.RightPart(1 - DrawContext.guiLabelPct), ref value, ref buffer, 0f, 999f);
         }
 
+        public static void DrawPercent(this Listing_Standard list, ref float value, string name) {
+            var rect = list.GetRect(Text.LineHeight);
+            list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value * 100, "n0", name, out var buffer);
+            Widgets.TextFieldPercent(rect.RightPart(1 - DrawContext.guiLabelPct), ref value, ref buffer, 0f, 10f);
+        }
+
         public static void DrawInt(this Listing_Standard list, ref int value, string name) {
             var rect = list.GetRect(Text.LineHeight);
             list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value, "n0", name, out var buffer);
