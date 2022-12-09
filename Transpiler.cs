@@ -35,9 +35,10 @@ namespace CodeOptimist
     public static class TranspilerHelper
     {
         public static IEnumerable<CodeInstruction> ReplaceTypes(IEnumerable<CodeInstruction> codes, Dictionary<Type, Type> subs) {
-            Debug.Assert(codes != null, "Is the patch being applied? Did you forget [HarmonyPatch] on the class?");
+            Debug.Assert(codes != null, "Is the patch being applied? Did you remember [HarmonyPatch] on the class?");
             var list = codes.ToList();
             foreach (var instruction in list) {
+                // ReSharper disable once AssignNullToNotNullAttribute
                 if (instruction.operand is MethodInfo methodInfo && subs.TryGetValue(methodInfo.DeclaringType, out var to)) {
                     var paramTypes   = methodInfo.GetParameters().Select(x => x.ParameterType).ToArray();
                     var genericTypes = methodInfo.GetGenericArguments();

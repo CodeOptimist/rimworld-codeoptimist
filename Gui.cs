@@ -1,6 +1,7 @@
-﻿using System;
+﻿// todo we could reverse transpile out the auto-capitalization
+
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using Verse;
