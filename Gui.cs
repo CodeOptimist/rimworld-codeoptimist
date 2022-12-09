@@ -51,8 +51,8 @@ namespace CodeOptimist
     {
         public static string modId;
 
-        public static string Title(this string name) => $"{modId}_SettingTitle_{name}".Translate();
-        public static string Desc(this string name)  => $"{modId}_SettingDesc_{name}".Translate();
+        public static string Title(this string name) => $"{modId}_SettingTitle_{name}".Translate().Resolve();
+        public static string Desc(this string name)  => $"{modId}_SettingDesc_{name}".Translate().Resolve();
 
         public static void DrawBool(this Listing_Standard list, ref bool value, string name) {
             list.CheckboxLabeled(name.Title(), ref value, name.Desc());
