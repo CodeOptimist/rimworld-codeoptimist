@@ -58,9 +58,9 @@ namespace CodeOptimist
             list.CheckboxLabeled(name.Title(), ref value, name.Desc());
         }
 
-        static void NumberLabel(this Listing_Standard list, Rect rect, float value, string name, out string buffer) {
+        static void NumberLabel(this Listing_Standard list, Rect rect, float value, string format, string name, out string buffer) {
             Widgets.Label(new Rect(rect.x, rect.y, rect.width - 8, rect.height), name.Title());
-            buffer = value.ToString(CultureInfo.InvariantCulture);
+            buffer = value.ToString(format);
             list.Gap(list.verticalSpacing);
 
             var tooltip = name.Desc();
@@ -73,13 +73,13 @@ namespace CodeOptimist
 
         public static void DrawFloat(this Listing_Standard list, ref float value, string name) {
             var rect = list.GetRect(Text.LineHeight);
-            list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value, name, out var buffer);
+            list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value, "f1", name, out var buffer);
             Widgets.TextFieldNumeric(rect.RightPart(1 - DrawContext.guiLabelPct), ref value, ref buffer, 0f, 999f);
         }
 
         public static void DrawInt(this Listing_Standard list, ref int value, string name) {
             var rect = list.GetRect(Text.LineHeight);
-            list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value, name, out var buffer);
+            list.NumberLabel(rect.LeftPart(DrawContext.guiLabelPct), value, "n0", name, out var buffer);
             Widgets.IntEntry(rect.RightPart(1 - DrawContext.guiLabelPct), ref value, ref buffer);
         }
 
