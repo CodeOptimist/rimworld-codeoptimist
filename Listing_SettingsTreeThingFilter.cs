@@ -8,10 +8,14 @@ using Verse;
 // ReSharper disable once RedundantUsingDirective
 using Debug = System.Diagnostics.Debug;
 
+// for Harmony patches
+// ReSharper disable UnusedType.Local
+// ReSharper disable UnusedMember.Local
+// ReSharper disable UnusedParameter.Local
+
 namespace CodeOptimist
 {
     [HarmonyPatch]
-    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     [SuppressMessage("ReSharper", "ParameterHidesMember")]
     public class Listing_SettingsTreeThingFilter : Listing_Tree
     {
@@ -174,9 +178,9 @@ namespace CodeOptimist
             [HarmonyPriority(Priority.VeryHigh)]
             [HarmonyAfter("com.github.automatic1111.recipeicons")]
             static bool RecipeIconsPatchOnly(Listing_Tree __instance, ThingDef tDef, int nestLevel, Map map) {
-                if (!(__instance is Listing_SettingsTreeThingFilter)) return true;
+                if (!(__instance is Listing_SettingsTreeThingFilter)) return PatchHelper.Continue();
                 OriginalDoThingDef(__instance, tDef, nestLevel, map);
-                return false;
+                return PatchHelper.Halt();
             }
         }
 

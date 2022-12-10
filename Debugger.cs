@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using Verse;
-using Verse.AI;
 // ReSharper disable once RedundantUsingDirective
 using Debug = System.Diagnostics.Debug;
 
@@ -12,11 +11,8 @@ namespace CodeOptimist
 {
     public class Debugger
     {
-        static readonly HashSet<string> openMethods = new HashSet<string>();
-        static readonly Harmony         harmony     = new Harmony("CodeOptimist.Logger");
-
-
-        static readonly List<Assembly> loggedAssemblies = new List<Assembly>();
+        static readonly HashSet<string> openMethods      = new HashSet<string>();
+        static readonly List<Assembly>  loggedAssemblies = new List<Assembly>();
 
         static readonly HashSet<MethodInfo> loggedMethods = new HashSet<MethodInfo>();
 
@@ -57,7 +53,7 @@ namespace CodeOptimist
         public static void LogMethod(MethodBase method) {
             Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null");
             try {
-                harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogCall))));
+                PatchHelper.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogCall))));
             } catch {
                 // ignored
             }
@@ -78,7 +74,7 @@ namespace CodeOptimist
             if (!patched) {
                 foreach (var method in Harmony.GetAllPatchedMethods()) {
                     try {
-                        harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogMod))));
+                        PatchHelper.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogMod))));
                     } catch {
                         // ignored
                     }
@@ -120,19 +116,6 @@ namespace CodeOptimist
             Debug.WriteLine("LOGGED MOD LIST:");
             foreach (var modName in loggedModNames)
                 Debug.WriteLine($"\t{modName}");
-        } // ReSharper disable UnusedType.Local
-        // ReSharper disable UnusedMember.Local
-
-        [HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.StartJob))]
-        static class Pawn_JobTracker_StartJob_Patch
-        {
-            [HarmonyPrefix]
-            static void LogModsOfJobLoop(Pawn ___pawn) {
-                if (___pawn.jobs.jobsGivenThisTick == 9)
-                    LogMods();
-                else if (___pawn.jobs.jobsGivenThisTick == 10)
-                    ReportMods();
-            }
         }
     }
 }
