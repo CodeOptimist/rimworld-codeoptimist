@@ -7,6 +7,11 @@ using Verse;
 // ReSharper disable once RedundantUsingDirective
 using Debug = System.Diagnostics.Debug;
 
+// for Harmony patches
+// ReSharper disable UnusedType.Local
+// ReSharper disable UnusedMember.Local
+// ReSharper disable UnusedParameter.Local
+
 namespace CodeOptimist
 {
     [HarmonyPatch]
@@ -350,4 +355,40 @@ namespace CodeOptimist
             return default;
         }
     }
+
+    public class SettingsThingFilter_LoadingContext : IDisposable
+    {
+        public static bool         active;
+        static        LoadSaveMode scribeMode;
+        readonly      bool         patched;
+
+        public SettingsThingFilter_LoadingContext() {
+            if (!patched) {
+                PatchHelper.harmony.Patch(
+                    AccessTools.Method(typeof(Log), nameof(Log.Error), new[] { typeof(string) }),
+                    prefix: new HarmonyMethod(typeof(Log__Error_Patch), nameof(Log__Error_Patch.IgnoreCouldNotLoadReference)));
+                patched = true;
+            }
+
+            scribeMode  = Scribe.mode;
+            Scribe.mode = LoadSaveMode.LoadingVars;
+            active      = true;
+        }
+
+        public void Dispose() {
+            active      = false;
+            Scribe.mode = scribeMode;
+        }
+
+        static class Log__Error_Patch
+        {
+            // full class path to this method name should be descriptive enough
+            public static bool IgnoreCouldNotLoadReference(string text) {
+                if (active && text.StartsWith("Could not load reference to "))
+                    return PatchHelper.Halt();
+                return PatchHelper.Continue();
+            }
+        }
+    }
+
 }
