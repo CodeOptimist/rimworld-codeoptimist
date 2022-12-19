@@ -62,9 +62,9 @@ namespace CodeOptimist
 
     public class Transpiler
     {
-        public static readonly CodeInstructionComparer                      comparer       = new CodeInstructionComparer();
-        readonly               Dictionary<int, List<List<CodeInstruction>>> indexesInserts = new Dictionary<int, List<List<CodeInstruction>>>();
-        readonly               List<Patch>                                  neighbors      = new List<Patch>();
+        public static readonly CodeInstructionComparer                      comparer       = new();
+        readonly               Dictionary<int, List<List<CodeInstruction>>> indexesInserts = new();
+        readonly               List<Patch>                                  neighbors      = new();
         readonly               MethodBase                                   originalMethod, patchMethod;
         public                 List<CodeInstruction>                        codes;
 #if DEBUG
@@ -185,9 +185,9 @@ namespace CodeOptimist
 #if DEBUG
             var bc4Path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Beyond Compare 4\BComp.exe");
             if (debug && File.Exists(bc4Path)) {
-                var leftTitle = $"{originalMethod.DeclaringType}::{originalMethod}";
+                var leftTitle  = $"{originalMethod.DeclaringType}::{originalMethod}";
                 var rightTitle = $"{patchMethod.NameWithType(false)}";
-                var leftTemp = Path.GetTempFileName();
+                var leftTemp   = Path.GetTempFileName();
                 File.WriteAllLines(leftTemp, initialCodes.Select(x => x.ToString()));
                 var rightTemp = Path.GetTempFileName();
                 File.WriteAllLines(rightTemp, outCodes.Select(x => x.ToString()));

@@ -11,8 +11,8 @@ namespace CodeOptimist
 {
     public class Debugger
     {
-        static readonly HashSet<string> openMethods      = new HashSet<string>();
-        static readonly List<Assembly>  loggedAssemblies = new List<Assembly>();
+        static readonly HashSet<string> openMethods      = new();
+        static readonly List<Assembly>  loggedAssemblies = new();
 
         static readonly HashSet<MethodInfo> loggedMethods = new HashSet<MethodInfo>();
 

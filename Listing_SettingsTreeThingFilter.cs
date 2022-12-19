@@ -19,15 +19,14 @@ namespace CodeOptimist
     [SuppressMessage("ReSharper", "ParameterHidesMember")]
     public class Listing_SettingsTreeThingFilter : Listing_Tree
     {
-        static readonly Dictionary<Type, Type> _subs = new Dictionary<Type, Type> {
+        static readonly Dictionary<Type, Type> _subs = new() {
             { typeof(Listing_TreeThingFilter), typeof(Listing_SettingsTreeThingFilter) },
             { typeof(ThingFilter), typeof(SettingsThingFilter) },
         };
 
         static readonly Color NoMatchColor = Color.grey;
 
-        static readonly LRUCache<ValueTuple<TreeNode_ThingCategory, SettingsThingFilter>, List<SpecialThingFilterDef>> cachedHiddenSpecialFilters =
-            new LRUCache<ValueTuple<TreeNode_ThingCategory, SettingsThingFilter>, List<SpecialThingFilterDef>>(500);
+        static readonly LRUCache<ValueTuple<TreeNode_ThingCategory, SettingsThingFilter>, List<SpecialThingFilterDef>> cachedHiddenSpecialFilters = new(500);
 
         public Listing_SettingsTreeThingFilter(SettingsThingFilter filter, SettingsThingFilter parentFilter, IEnumerable<ThingDef> forceHiddenDefs,
             IEnumerable<SpecialThingFilterDef> forceHiddenFilters, List<ThingDef> suppressSmallVolumeTags, QuickSearchFilter searchFilter) {

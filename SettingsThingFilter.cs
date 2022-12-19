@@ -18,7 +18,7 @@ namespace CodeOptimist
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public class SettingsThingFilter : IExposable
     {
-        static readonly Dictionary<Type, Type> _subs = new Dictionary<Type, Type> {
+        static readonly Dictionary<Type, Type> _subs = new() {
             { typeof(Listing_TreeThingFilter), typeof(Listing_SettingsTreeThingFilter) },
             { typeof(ThingFilter), typeof(SettingsThingFilter) },
         };
@@ -27,9 +27,9 @@ namespace CodeOptimist
 
         [Unsaved] public TreeNode_ThingCategory displayRootCategoryInt;
 
-        [Unsaved] public HashSet<ThingDef> allowedDefs = new HashSet<ThingDef>();
+        [Unsaved] public HashSet<ThingDef> allowedDefs = new();
 
-        [Unsaved] public List<SpecialThingFilterDef> disallowedSpecialFilters = new List<SpecialThingFilterDef>();
+        [Unsaved] public List<SpecialThingFilterDef> disallowedSpecialFilters = new();
 
         public FloatRange   allowedHitPointsPercents     = FloatRange.ZeroToOne;
         public bool         allowedHitPointsConfigurable = true;
@@ -390,5 +390,4 @@ namespace CodeOptimist
             }
         }
     }
-
 }

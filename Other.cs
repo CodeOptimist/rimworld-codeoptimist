@@ -13,7 +13,7 @@ namespace CodeOptimist
 {
     static class PatchHelper
     {
-        public static readonly Harmony harmony = new Harmony("CodeOptimist");
+        public static readonly Harmony harmony = new("CodeOptimist");
 
         // Harmony patch syntactic sugar to visually distinguish these special cases from actual return true/false
         public static bool Continue(object _ = null) => true;
@@ -21,16 +21,16 @@ namespace CodeOptimist
     }
 
 #if DEBUG
-        [HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.StartJob))]
-        static class Pawn_JobTracker_StartJob_Patch
-        {
-            [HarmonyPrefix]
-            static void LogModsOfJobLoop(Pawn ___pawn) {
-                if (___pawn.jobs.jobsGivenThisTick == 9)
-                    Debugger.LogMods();
-                else if (___pawn.jobs.jobsGivenThisTick == 10)
-                    Debugger.ReportMods();
-            }
+    [HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.StartJob))]
+    static class Pawn_JobTracker_StartJob_Patch
+    {
+        [HarmonyPrefix]
+        static void LogModsOfJobLoop(Pawn ___pawn) {
+            if (___pawn.jobs.jobsGivenThisTick == 9)
+                Debugger.LogMods();
+            else if (___pawn.jobs.jobsGivenThisTick == 10)
+                Debugger.ReportMods();
         }
+    }
 #endif
 }

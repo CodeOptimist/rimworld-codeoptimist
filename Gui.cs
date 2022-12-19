@@ -1,4 +1,4 @@
-﻿// todo we could reverse transpile out the auto-capitalization
+﻿// todo we could reverse transpile out auto-capitalization
 
 using System;
 using System.Collections.Generic;
