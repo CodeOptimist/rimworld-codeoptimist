@@ -11,7 +11,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace CodeOptimist
 {
-    static class PatchHelper
+    public static class Patch
     {
         public static readonly Harmony harmony = new("CodeOptimist");
 
