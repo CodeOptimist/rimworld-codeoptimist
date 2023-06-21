@@ -9,7 +9,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace CodeOptimist
 {
-    public class Debugger
+    public class Diagnostics
     {
         static readonly HashSet<string> openMethods      = new();
         static readonly List<Assembly>  loggedAssemblies = new();
