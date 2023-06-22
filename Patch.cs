@@ -28,7 +28,8 @@ namespace CodeOptimist
                 Diagnostics.LogMods();
             else if (___pawn.jobs.jobsGivenThisTick == 10) {
                 Debug.WriteLine($"Tick {RealTime.frameCount}");
-                Diagnostics.ReportMods();
+                Diagnostics.ReportOngoingMods();
+                Find.TickManager.Pause();
             }
         }
     }

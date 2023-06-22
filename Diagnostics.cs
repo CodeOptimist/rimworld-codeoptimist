@@ -11,10 +11,10 @@ namespace CodeOptimist
 {
     public class Diagnostics
     {
-        static readonly Harmony             harmony          = new("CodeOptimist.Diagnostics");
-        static readonly HashSet<string>     openMethods      = new();
-        static readonly List<Assembly>      loggedAssemblies = new();
-        static readonly HashSet<MethodInfo> loggedMethods    = new();
+        static readonly Harmony             harmony              = new("CodeOptimist.Diagnostics");
+        static readonly HashSet<string>     openMethods          = new();
+        static readonly List<Assembly>      loggedAssemblies     = new();
+        static readonly HashSet<MethodInfo> loggedPatchedMethods = new();
 
         static bool logging;
         static bool patched;
@@ -85,7 +85,7 @@ namespace CodeOptimist
                 patched = true;
             }
 
-            loggedMethods.Clear();
+            loggedPatchedMethods.Clear();
             loggedAssemblies.Clear();
             logging = true;
         }
@@ -93,8 +93,8 @@ namespace CodeOptimist
         static void LogMod(MethodInfo __originalMethod) {
             if (!logging) return;
             LogCall(__originalMethod);
-            if (loggedMethods.Contains(__originalMethod)) return;
 
+            if (loggedPatchedMethods.Contains(__originalMethod)) return;
             var patch = Harmony.GetPatchInfo(__originalMethod);
             foreach (var prefix in patch.Prefixes)
                 loggedAssemblies.AddDistinct(prefix.PatchMethod.DeclaringType?.Assembly);
@@ -104,20 +104,25 @@ namespace CodeOptimist
                 loggedAssemblies.AddDistinct(transpiler.PatchMethod.DeclaringType?.Assembly);
             foreach (var finalizer in patch.Finalizers)
                 loggedAssemblies.AddDistinct(finalizer.PatchMethod.DeclaringType?.Assembly);
-
-            loggedMethods.Add(__originalMethod);
+            loggedPatchedMethods.Add(__originalMethod);
         }
 
-        public static void ReportMods() {
+        static readonly HashSet<string> ongoingLoggedMods = new();
+
+        public static void ReportOngoingMods() {
             logging = false;
 
-            var loggedMods = loggedAssemblies.Select(
+            var loggedContentPacks = loggedAssemblies.Select(
                 assembly => LoadedModManager.RunningModsListForReading.First(modContent => modContent.assemblies.loadedAssemblies.Contains(assembly)));
-            var loggedModNames = loggedMods.Select(x => x.Name).ToList();
-            loggedModNames.Sort();
+            var loggedMods = loggedContentPacks.Select(x => x.Name).ToList();
+            loggedMods.Sort();
+            if (ongoingLoggedMods.Count == 0)
+                ongoingLoggedMods.AddRange(loggedMods);
+            else
+                ongoingLoggedMods.IntersectWith(loggedMods);
 
             Debug.WriteLine("LOGGED MOD LIST:");
-            foreach (var modName in loggedModNames)
+            foreach (var modName in ongoingLoggedMods)
                 Debug.WriteLine($"\t{modName}");
         }
     }
