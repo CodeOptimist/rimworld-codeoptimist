@@ -358,13 +358,14 @@ namespace CodeOptimist
 
     public class SettingsThingFilter_LoadingContext : IDisposable
     {
-        public static bool         active;
+        static readonly Harmony      harmony = new("CodeOptimist.SettingsThingFilter");
+        static          bool         active;
         static        LoadSaveMode scribeMode;
         readonly      bool         patched;
 
         public SettingsThingFilter_LoadingContext() {
             if (!patched) {
-                PatchHelper.harmony.Patch(
+                harmony.Patch(
                     AccessTools.Method(typeof(Log), nameof(Log.Error), new[] { typeof(string) }),
                     prefix: new HarmonyMethod(typeof(Log__Error_Patch), nameof(Log__Error_Patch.IgnoreCouldNotLoadReference)));
                 patched = true;
@@ -385,8 +386,8 @@ namespace CodeOptimist
             // full class path to this method name should be descriptive enough
             public static bool IgnoreCouldNotLoadReference(string text) {
                 if (active && text.StartsWith("Could not load reference to "))
-                    return PatchHelper.Halt();
-                return PatchHelper.Continue();
+                    return Patch.Halt();
+                return Patch.Continue();
             }
         }
     }

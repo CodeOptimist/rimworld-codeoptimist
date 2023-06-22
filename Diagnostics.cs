@@ -11,8 +11,9 @@ namespace CodeOptimist
 {
     public class Diagnostics
     {
-        static readonly HashSet<string> openMethods      = new();
-        static readonly List<Assembly>  loggedAssemblies = new();
+        static readonly Harmony             harmony          = new("CodeOptimist.Diagnostics");
+        static readonly HashSet<string>     openMethods      = new();
+        static readonly List<Assembly>      loggedAssemblies = new();
 
         static readonly HashSet<MethodInfo> loggedMethods = new HashSet<MethodInfo>();
 
@@ -53,7 +54,7 @@ namespace CodeOptimist
         public static void LogMethod(MethodBase method) {
             Debug.Assert(method.DeclaringType != null, "method.DeclaringType != null");
             try {
-                PatchHelper.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogCall))));
+                harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Diagnostics), nameof(LogCall))));
             } catch {
                 // ignored
             }
@@ -74,7 +75,7 @@ namespace CodeOptimist
             if (!patched) {
                 foreach (var method in Harmony.GetAllPatchedMethods()) {
                     try {
-                        PatchHelper.harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Debugger), nameof(LogMod))));
+                        harmony.Patch(method, new HarmonyMethod(AccessTools.Method(typeof(Diagnostics), nameof(LogMod))));
                     } catch {
                         // ignored
                     }

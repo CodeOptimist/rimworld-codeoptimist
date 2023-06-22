@@ -64,7 +64,7 @@ namespace CodeOptimist
     {
         public static readonly CodeInstructionComparer                      comparer       = new();
         readonly               Dictionary<int, List<List<CodeInstruction>>> indexesInserts = new();
-        readonly               List<Patch>                                  neighbors      = new();
+        readonly               List<HarmonyLib.Patch>                       neighbors      = new();
         readonly               MethodBase                                   originalMethod, patchMethod;
         public                 List<CodeInstruction>                        codes;
 #if DEBUG
@@ -232,17 +232,17 @@ namespace CodeOptimist
 
         class CodeNotFoundException : Exception
         {
-            public CodeNotFoundException(List<CodeInstruction> sequence, MethodBase patchMethod, List<Patch> neighbors) : this(
+            public CodeNotFoundException(List<CodeInstruction> sequence, MethodBase patchMethod, List<HarmonyLib.Patch> neighbors) : this(
                 $"Unmatched sequence: {string.Join(", ", sequence.Select(x => x.ToString()))}",
                 patchMethod, neighbors) {
             }
 
-            public CodeNotFoundException(MethodInfo matchMethod, MethodBase patchMethod, List<Patch> neighbors) : this(
+            public CodeNotFoundException(MethodInfo matchMethod, MethodBase patchMethod, List<HarmonyLib.Patch> neighbors) : this(
                 $"Unmatched predicate: {BitConverter.ToString(matchMethod.GetMethodBody()?.GetILAsByteArray() ?? Array.Empty<byte>()).Replace("-", "")}",
                 patchMethod, neighbors) {
             }
 
-            CodeNotFoundException(string message, MethodBase patchMethod, List<Patch> neighbors) :
+            CodeNotFoundException(string message, MethodBase patchMethod, List<HarmonyLib.Patch> neighbors) :
                 base(message) {
                 var modContent = LoadedModManager.RunningModsListForReading.First(x => x.assemblies.loadedAssemblies.Contains(patchMethod.DeclaringType?.Assembly));
                 var neighborMods = neighbors.Select(

@@ -48,6 +48,20 @@ namespace CodeOptimist
         static void OriginalDoThingDef(object instance, ThingDef tDef, int nestLevel, Map map) {
         }
 
+        [HarmonyPatch(typeof(Listing_TreeThingFilter), nameof(Listing_TreeThingFilter.DoThingDef))]
+        static class Listing_TreeThingFilter_DoThingDef_Patch
+        {
+            [HarmonyPrefix]
+            [HarmonyPriority(Priority.VeryHigh)]
+            [HarmonyAfter("com.github.automatic1111.recipeicons")]
+            static bool RecipeIconsPatchOnly(Listing_Tree __instance, ThingDef tDef, int nestLevel, Map map) {
+                if (!(__instance is Listing_SettingsTreeThingFilter)) return Patch.Continue();
+                OriginalDoThingDef(__instance, tDef, nestLevel, map);
+                return Patch.Halt();
+            }
+        }
+
+    #region vanilla but replaced type
         [HarmonyReversePatch]
         [HarmonyPatch(typeof(Listing_TreeThingFilter), nameof(Listing_TreeThingFilter.ListCategoryChildren))]
         public void ListCategoryChildren(TreeNode_ThingCategory node, int openMask, Map map, Rect visibleRect) {
@@ -169,19 +183,7 @@ namespace CodeOptimist
             IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codes) => TranspilerHelper.ReplaceTypes(codes, _subs);
             var _ = Transpiler(null);
         }
-
-        [HarmonyPatch(typeof(Listing_TreeThingFilter), nameof(Listing_TreeThingFilter.DoThingDef))]
-        static class Listing_TreeThingFilter_DoThingDef_Patch
-        {
-            [HarmonyPrefix]
-            [HarmonyPriority(Priority.VeryHigh)]
-            [HarmonyAfter("com.github.automatic1111.recipeicons")]
-            static bool RecipeIconsPatchOnly(Listing_Tree __instance, ThingDef tDef, int nestLevel, Map map) {
-                if (!(__instance is Listing_SettingsTreeThingFilter)) return PatchHelper.Continue();
-                OriginalDoThingDef(__instance, tDef, nestLevel, map);
-                return PatchHelper.Halt();
-            }
-        }
+    #endregion
 
 #pragma warning disable 169
         SettingsThingFilter         filter;
