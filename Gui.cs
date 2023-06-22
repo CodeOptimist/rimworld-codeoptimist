@@ -51,7 +51,6 @@ namespace CodeOptimist
     public static class Gui
     {
         public static string modId;
-
         public static string Title(this string name) => $"{modId}_SettingTitle_{name}".Translate().Resolve();
         public static string Desc(this string name)  => $"{modId}_SettingDesc_{name}".Translate().Resolve();
 

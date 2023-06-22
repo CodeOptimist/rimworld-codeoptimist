@@ -14,8 +14,7 @@ namespace CodeOptimist
         static readonly Harmony             harmony          = new("CodeOptimist.Diagnostics");
         static readonly HashSet<string>     openMethods      = new();
         static readonly List<Assembly>      loggedAssemblies = new();
-
-        static readonly HashSet<MethodInfo> loggedMethods = new HashSet<MethodInfo>();
+        static readonly HashSet<MethodInfo> loggedMethods    = new();
 
         static bool logging;
         static bool patched;
@@ -68,7 +67,7 @@ namespace CodeOptimist
             // if (openMethods.Count == 1)
             //     Debug.WriteLine($"{Environment.StackTrace}");
             var tabs = new string('\t', (openMethods.Count - 1) * 2);
-            Debug.WriteLine($"{RealTime.frameCount} • {tabs}{__originalMethod.DeclaringType} -> {__originalMethod}");
+            Debug.WriteLine($" • {tabs}{__originalMethod.DeclaringType} -> {__originalMethod}");
         }
 
         public static void LogMods() {

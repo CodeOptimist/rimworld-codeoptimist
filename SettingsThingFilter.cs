@@ -16,6 +16,7 @@ namespace CodeOptimist
 {
     [HarmonyPatch]
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class SettingsThingFilter : IExposable
     {
         static readonly Dictionary<Type, Type> _subs = new() {
@@ -360,8 +361,8 @@ namespace CodeOptimist
     {
         static readonly Harmony      harmony = new("CodeOptimist.SettingsThingFilter");
         static          bool         active;
-        static        LoadSaveMode scribeMode;
-        readonly      bool         patched;
+        static          LoadSaveMode scribeMode;
+        readonly        bool         patched;
 
         public SettingsThingFilter_LoadingContext() {
             if (!patched) {

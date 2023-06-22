@@ -27,9 +27,7 @@ namespace CodeOptimist
             return false;
         }
 
-        public int GetHashCode(CodeInstruction obj) {
-            return obj.GetHashCode();
-        }
+        public int GetHashCode(CodeInstruction obj) => obj.GetHashCode();
     }
 
     public static class TranspilerHelper
@@ -95,17 +93,13 @@ namespace CodeOptimist
         public int MatchIdx  { get; private set; }
         public int InsertIdx { get; private set; }
 
-        public int TryFindCodeIndex(Predicate<CodeInstruction> match) {
-            return TryFindCodeIndex(0, match);
-        }
+        public int TryFindCodeIndex(Predicate<CodeInstruction> match) => TryFindCodeIndex(0, match);
 
         public int TryFindCodeIndex(int startIndex, Predicate<CodeInstruction> match) {
             return TryFind(match, () => codes.FindIndex(startIndex, match));
         }
 
-        public int TryFindCodeLastIndex(Predicate<CodeInstruction> match) {
-            return TryFindCodeLastIndex(codes.Count - 1, match);
-        }
+        public int TryFindCodeLastIndex(Predicate<CodeInstruction> match) => TryFindCodeLastIndex(codes.Count - 1, match);
 
         public int TryFindCodeLastIndex(int startIndex, Predicate<CodeInstruction> match) {
             return TryFind(match, () => codes.FindLastIndex(startIndex, match));
@@ -132,9 +126,7 @@ namespace CodeOptimist
             }
         }
 
-        public int TryFindCodeSequence(List<CodeInstruction> sequence) {
-            return TryFindCodeSequence(0, sequence);
-        }
+        public int TryFindCodeSequence(List<CodeInstruction> sequence) => TryFindCodeSequence(0, sequence);
 
         // https://stackoverflow.com/a/12302013/879
         public int TryFindCodeSequence(int startIndex, List<CodeInstruction> sequence) {
