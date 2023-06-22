@@ -59,10 +59,13 @@ namespace CodeOptimist
             }
         }
 
+        static int? realMethodCallStackIdx;
+
         static void LogCall(MethodInfo __originalMethod) {
             var callStack = Environment.StackTrace.Split('\n');
             openMethods.IntersectWith(callStack);
-            openMethods.Add(callStack[2]);
+            realMethodCallStackIdx ??= callStack.Skip(1).FirstIndexOf(s => !s.StartsWith($"  at {MethodBase.GetCurrentMethod()!.DeclaringType}")) + 1;
+            openMethods.Add(callStack[(int)realMethodCallStackIdx]);
 
             // if (openMethods.Count == 1)
             //     Debug.WriteLine($"{Environment.StackTrace}");
