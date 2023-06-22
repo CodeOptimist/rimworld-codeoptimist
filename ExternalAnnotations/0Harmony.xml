@@ -1,0 +1,5 @@
+﻿<assembly name="0Harmony">
+    <member name="M:HarmonyLib.GeneralExtensions.GetValueSafe``2(System.Collections.Generic.Dictionary{``0,``1},``0)">
+        <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </member>
+</assembly>
