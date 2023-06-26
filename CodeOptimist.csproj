@@ -3,20 +3,15 @@
 <!--EXTERNAL_PROPERTIES: Temp-->
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <ProjectGuid>{D0EFED26-1507-42B2-AD67-21D28D75B8D1}</ProjectGuid>
         <TargetFramework>net472</TargetFramework>
-        <LangVersion>9.0</LangVersion>
-        <AssemblyTitle>CodeOptimist</AssemblyTitle>
-        <Product>CodeOptimist</Product>
+        <LangVersion>latest</LangVersion>
         <Copyright>Copyright © 2020-$([System.DateTime]::Now.Year) Christopher Galpin</Copyright>
         <MinutesSinceEpoch>$([System.DateTime]::UtcNow.Subtract($([System.DateTime]::MinValue)).TotalMinutes)</MinutesSinceEpoch>
         <Revision>$([System.Math]::Truncate($([System.Decimal]::Remainder($(MinutesSinceEpoch), 10000))))</Revision>
         <Version>1.0.0.$(Revision)</Version>
-        <AssemblyVersion>$(Version)</AssemblyVersion>
-        <FileVersion>$(Version)</FileVersion>
-        <OutputPath>bin\$(Configuration)\</OutputPath>
         <PublicizeAsReferenceAssemblies>false</PublicizeAsReferenceAssemblies>
         <RimWorldAssemblyPath>$(MsBuildProgramFiles32)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\</RimWorldAssemblyPath>
+        <Nullable>warnings</Nullable>
     </PropertyGroup>
     <Target Name="BuildMessage" AfterTargets="Build">
         <Message Text="$(Version)" Importance="High" />
