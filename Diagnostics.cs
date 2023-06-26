@@ -33,8 +33,8 @@ namespace CodeOptimist
 
         public static void LogNamespace(string modName, string @namespace) {
             var mod = LoadedModManager.RunningModsListForReading.FirstOrDefault(x => x.Name == modName);
-            Debug.Assert(mod != null);
-            var types = mod.assemblies.loadedAssemblies.SelectMany(x => x.GetTypes()).Where(t => t.IsClass)
+            Debug.Assert(mod != null, nameof(mod) + " != null");
+            var types = mod!.assemblies.loadedAssemblies.SelectMany(x => x.GetTypes()).Where(t => t.IsClass)
                 .Where(t => t.Namespace == @namespace || (t.Namespace?.StartsWith($"{@namespace}.") ?? false));
             foreach (var type in types)
                 LogType(type);
